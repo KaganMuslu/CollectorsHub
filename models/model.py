@@ -8,7 +8,7 @@ class Gender(str, Enum):
     male = "male"
     female = "female"
 
-class Categories(str, Enum):
+class EnumCategories(str, Enum):
     comic_books = "Comic Books"
     trading_card_games = "Trading Card Games"
     board_games = "Board Games"
@@ -27,12 +27,33 @@ class User(BaseModel):
 # Categories Table
 class Category(BaseModel):
     id: int
-    name: Categories
+    name: EnumCategories
 
 # Products Table
 class Product(BaseModel):
     id: int
     name: str
-    categoty: Categories
+    category: EnumCategories
     quantity: int
+    price: Optional[int] = None
+
+    class Config:
+        use_enum_values = False 
+
+
+# User Update Model
+class UpdateUser(BaseModel):
+    username: Optional[str] = None
+    password: Optional[str] = None
+    gender: Optional[Gender] = None
+
+# Category Update Model
+class UpdateCategory(BaseModel):
+    name: Optional[EnumCategories] = None
+
+# Product Update Model
+class UpdateProduct(BaseModel):
+    name: Optional[str] = None
+    categoty: Optional[EnumCategories] = None
+    quantity: Optional[int] = None
     price: Optional[int] = None
