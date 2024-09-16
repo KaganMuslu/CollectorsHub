@@ -1,6 +1,5 @@
 from enum import Enum
 from typing import Optional
-from uuid import UUID, uuid4
 from pydantic import BaseModel
 
 # Enums
@@ -51,9 +50,8 @@ class UpdateUser(BaseModel):
 class UpdateCategory(BaseModel):
     name: Optional[EnumCategories] = None
 
-# Product Update Model
-class UpdateProduct(BaseModel):
-    name: Optional[str] = None
-    categoty: Optional[EnumCategories] = None
-    quantity: Optional[int] = None
-    price: Optional[int] = None
+def update_model(instance: Product, updates: dict):
+    for field, value in updates.items():
+        if value is not None:
+            setattr(instance, field, value)
+    return instance
