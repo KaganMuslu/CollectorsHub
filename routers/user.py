@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Path
+from fastapi.encoders import jsonable_encoder
 from models.model import User, UpdateUser
 from models.database import db_users
 
@@ -35,17 +36,14 @@ def delete_one_user(user_id: int = Path(description="The ID of the user") ):
 
 # Update One User
 @router.put("/{user_id}")
-def update_one_user(user:UpdateUser, user_id: int = Path(description="The ID of the user")):
+def update_one_category(product: UpdateUser, user_id: int = Path(description="The ID of the user")):
     if user_id >= len(db_users):
         raise HTTPException(status_code=404, detail="User not found!")
 
-    oldUser = db_users[user_id]
-    
-    if user.username is not None:
-        oldUser.username = user.username
-    if user.password is not None:
-        oldUser.password = user.password
-    if user.gender is not None:
-        oldUser.gender = user.gender
+    old_user = db_users[user_id]
+    update_user = product.dict(exclude_unset=True)
+    new_user = old_user.copy(update=update_user)
 
-    return {"data": db_users[user_id] }
+    db_users[user_id] = jsonable_encoder(new_user)
+
+    return {"data": new_user}

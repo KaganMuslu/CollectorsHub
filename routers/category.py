@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, Path
+from fastapi.encoders import jsonable_encoder
 from models.model import Category, UpdateCategory
 from models.database import db_categories
 
@@ -35,13 +36,14 @@ def delete_one_category(category_id: int = Path(description="The ID of the categ
 
 # Update One Category
 @router.put("/{category_id}")
-def update_one_category(category:UpdateCategory, category_id: int = Path(description="The ID of the category")):
+def update_one_category(product: UpdateCategory, category_id: int = Path(description="The ID of the category")):
     if category_id >= len(db_categories):
         raise HTTPException(status_code=404, detail="Category not found!")
 
-    oldCategory = db_categories[category_id]
-    
-    if category.name is not None:
-        oldCategory.name = category.name
+    old_category = db_categories[category_id]
+    update_category = product.dict(exclude_unset=True)
+    new_category = old_category.copy(update=update_category)
 
-    return {"data": db_categories[category_id] }
+    db_categories[category_id] = jsonable_encoder(new_category)
+
+    return {"data": new_category}
