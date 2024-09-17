@@ -11,7 +11,7 @@ def all_users():
     return {"data": db_users }
 
 # Add One User
-@router.post("")
+@router.post("", status_code=201)
 def post_user(user: User):
     db_users.append(user)
     return {"data": "successfull!"}

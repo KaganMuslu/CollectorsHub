@@ -11,7 +11,7 @@ def all_categories():
     return {"data": db_categories }
 
 # Add One Category
-@router.post("")
+@router.post("", status_code=201)
 def post_category(category: Category):
     db_categories.append(category)
     return {"data": "successfull!"}

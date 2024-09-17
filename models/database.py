@@ -17,13 +17,13 @@ db_categories: List[Category] = [
 
 # Ürünler veritabanı
 db_products: List[Product] = [
-    Product(id=0, name="Spider-Man Comic", category=EnumCategories.comic_books, quantity=10, price=15),
-    Product(id=1, name="Magic: The Gathering Deck", category=EnumCategories.trading_card_games, quantity=5, price=25),
-    Product(id=2, name="Catan Board Game", category=EnumCategories.board_games, quantity=3, price=40)
+    Product(id=0, name="Spider-Verse Comic", category=EnumCategories.comic_books, quantity=10, price=6.99),
+    Product(id=1, name="Magic: The Gathering Ninja Deck", category=EnumCategories.trading_card_games, quantity=5, price=25.50),
+    Product(id=2, name="Catan Board Game", category=EnumCategories.board_games, quantity=3, price=40.39)
 ]
 
 # Tek bir veritabanı yapısı
-db_products = {
+db = {
     "users": db_users,
     "categories": db_categories,
     "products": db_products
