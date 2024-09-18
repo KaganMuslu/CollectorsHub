@@ -19,6 +19,7 @@ class Category(BaseModel):
 class Product(BaseModel):
     id: int
     name: str
+    description: Optional[str] = None
     category: EnumCategories
     quantity: int
     price: Optional[float] = None
@@ -37,6 +38,7 @@ class UpdateCategory(BaseModel):
 # Products Table
 class UpdateProduct(BaseModel):
     name: Optional[str] = None
+    description: Optional[str] = None
     category: Optional[EnumCategories] = None
     quantity: Optional[int] = None
     price: Optional[float] = None

@@ -17,8 +17,8 @@ db_categories: List[Category] = [
 
 # Ürünler veritabanı
 db_products: List[Product] = [
-    Product(id=0, name="Spider-Verse Comic", category=EnumCategories.comic_books, quantity=10, price=6.99),
-    Product(id=1, name="Yu-Gi-Oh! Plunder Patroll Deck", category=EnumCategories.trading_card_games, quantity=5, price=25.50),
+    Product(id=0, name="Spider-Verse Comic", description="Full art coverback", category=EnumCategories.comic_books, quantity=10, price=6.99),
+    Product(id=1, name="Yu-Gi-Oh! Plunder Patroll Deck", description="Top rouge tier full playable deck", category=EnumCategories.trading_card_games, quantity=5, price=25.50),
     Product(id=2, name="Catan Board Game", category=EnumCategories.board_games, quantity=3, price=40.39)
 ]
 
