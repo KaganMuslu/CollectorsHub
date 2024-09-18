@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 from enums.enum import EnumCategories, Gender
@@ -24,6 +25,17 @@ class Product(BaseModel):
     quantity: int
     price: Optional[float] = None
 
+class Review(BaseModel):
+    id: int
+    user_id: int
+    product_id: int
+    rating: int
+    comment: Optional[str] = None
+    review_date: datetime = datetime.now()
+
+
+
+### UPDATE MODELS
 
 # User Update Model
 class UpdateUser(BaseModel):
@@ -42,3 +54,8 @@ class UpdateProduct(BaseModel):
     category: Optional[EnumCategories] = None
     quantity: Optional[int] = None
     price: Optional[float] = None
+
+class UpdateReview(BaseModel):
+    rating: Optional[int] = None
+    comment: Optional[str] = None
+    review_date: datetime = datetime.now()

@@ -1,4 +1,4 @@
-from models.model import Gender, User, Category, EnumCategories, Product
+from models.model import Gender, Review, User, Category, EnumCategories, Product
 from typing import List
 
 
@@ -22,9 +22,15 @@ db_products: List[Product] = [
     Product(id=2, name="Catan Board Game", category=EnumCategories.board_games, quantity=3, price=40.39)
 ]
 
+# Ürünler veritabanı
+db_reviews: List[Product] = [
+    Review(id=0, user_id=1, product_id=2, rating=7, comment="Good to collect")
+]
+
 # Tek bir veritabanı yapısı
 db = {
     "users": db_users,
     "categories": db_categories,
-    "products": db_products
+    "products": db_products,
+    "reviews": db_reviews
 }

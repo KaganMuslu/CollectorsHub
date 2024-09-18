@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routers import user, category, product
+from routers import review, user, category, product
 
 app = FastAPI()
 
@@ -18,3 +18,4 @@ def root():
 app.include_router(user.router, prefix="/user", tags=["Users"])
 app.include_router(category.router, prefix="/category", tags=["Categories"])
 app.include_router(product.router, prefix="/product", tags=["Products"])
+app.include_router(review.router, prefix="/review", tags=["Reviews"])
