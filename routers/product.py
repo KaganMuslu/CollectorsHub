@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Path
+"""from fastapi import APIRouter, HTTPException, Path
 from fastapi.encoders import jsonable_encoder
 from models.model import Product, UpdateProduct
 from models.database import db
@@ -47,3 +47,4 @@ def update_one_product(product: UpdateProduct, product_id: int = Path(descriptio
     db["products"][product_id] = jsonable_encoder(new_product)
 
     return {"data": new_product}
+"""

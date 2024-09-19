@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Path
+"""from fastapi import APIRouter, HTTPException, Path
 from fastapi.encoders import jsonable_encoder
 from models.model import Category, UpdateCategory
 from models.database import db
@@ -47,3 +47,4 @@ def update_one_category(category: UpdateCategory, category_id: int = Path(descri
     db["categories"][category_id] = jsonable_encoder(new_category)
 
     return {"data": new_category}
+"""

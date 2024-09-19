@@ -1,7 +1,6 @@
 from models.model import Gender, Review, User, Category, EnumCategories, Product
 from typing import List
 
-
 # Kullanıcılar veritabanı
 db_users: List[User] = [
     User(id=0, username="DualPatroll", password="asdqwe", gender=Gender.female),
