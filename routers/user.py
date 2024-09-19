@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-# if user exist returns user
+# If user exist returns user
 def user_db_query(db, user_id):
     user = db.query(User).filter(User.id == user_id).first()
     if (user == None):

@@ -42,8 +42,9 @@ class Product(Base):
     price = Column(Float, nullable=True)
 
     user_id = Column(Integer, ForeignKey("user.id"))
-    user = relationship("User", back_populates="products")
     category_id = Column(Integer, ForeignKey("category.id"))
+
+    user = relationship("User", back_populates="products")
     category = relationship("Category", back_populates="products")
     reviews = relationship("Review", back_populates="product")
 
@@ -56,8 +57,9 @@ class Review(Base):
     review_date = Column(DateTime, default=func.now)
 
     product_id = Column(Integer, ForeignKey('product.id'))
-    product = relationship("Product", back_populates="reviews")
     user_id = Column(Integer, ForeignKey('user.id'))
+
+    product = relationship("Product", back_populates="reviews")
     user = relationship("User", back_populates="reviews")
 
 # Create every model
@@ -82,7 +84,7 @@ class PydanticUser(BaseModel):
 
 # Category Pydantic Model
 class PydanticCategory(BaseModel):
-    name: Optional[EnumCategories] = None
+    name: EnumCategories
 
 # Products Table
 class PydanticProduct(BaseModel):

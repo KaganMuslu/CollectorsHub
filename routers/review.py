@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter()
 
-# if review exist returns review
+# If review exist returns review
 def review_db_query(db, review_id):
     review = db.query(Review).filter(Review.id == review_id).first()
     if (review == None):
