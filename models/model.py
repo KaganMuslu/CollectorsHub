@@ -93,9 +93,10 @@ class PydanticProduct(BaseModel):
     price: Optional[float] = None
 
 class PydanticReview(BaseModel):
-    rating: Optional[int] = None
+    product_id: int
+    user_id: int
+    rating: int
     comment: Optional[str] = None
-    review_date: Optional[datetime] = datetime.now()
 
 
 ### PYDANTIC UPDATE MODELS
@@ -121,11 +122,3 @@ class UpdateProduct(BaseModel):
 class UpdateReview(BaseModel):
     rating: Optional[int] = None
     comment: Optional[str] = None
-    review_date: Optional[datetime] = datetime.now()
-
-
-
-
-
-
-### TÜM PDATE OLMAYAN PYTDANTIC MODELLERİ DÜZENLE

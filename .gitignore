@@ -1,1 +1,5 @@
 /__pycache__
+CollectorsHub.db
+enums/__pycache__
+models/__pycache__
+routers/__pycache__

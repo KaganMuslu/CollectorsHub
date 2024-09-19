@@ -1,50 +1,56 @@
-"""from fastapi import APIRouter, HTTPException, Path
-from fastapi.encoders import jsonable_encoder
-from models.model import Review, UpdateReview
-from models.database import db
+from fastapi import APIRouter, Depends, HTTPException, Path
+from models.model import PydanticReview, Review, UpdateReview, get_db
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
+# if review exist returns review
+def review_db_query(db, review_id):
+    review = db.query(Review).filter(Review.id == review_id).first()
+    if (review == None):
+        raise HTTPException(status_code=404, detail="Review not found!")
+    else:
+        return review
 
 # Get All Reviews
 @router.get("")
-def all_reviews():
-    return {"data": db["reviews"] }
+def all_reviews(db: Session = Depends(get_db)):
+    return {"data": db.query(Review).all()}
 
 # Add One Review
 @router.post("", status_code=201)
-def post_review(review: Review):
-    db["reviews"].append(review)
+def post_review(review: PydanticReview, db: Session = Depends(get_db)):
+    new_review = Review(**review.model_dump())
+    db.add(new_review)
+    db.commit()
     return {"data": "successfull!"}
 
 # Get One Review
 @router.get("/{review_id}")
-def get_one_review(review_id: int = Path(description="The ID of the Review") ):
-    if review_id >= len(db["reviews"]):
-        raise HTTPException(status_code=404, detail="Review not found!")
+def get_one_review(review_id: int = Path(description="The ID of the Review"), db: Session = Depends(get_db)):
+    review = review_db_query(db, review_id)
     
-    return {"data": db["reviews"][review_id] } 
+    return {"data": review} 
 
 # Delete One Review
 @router.delete("/{review_id}")
-def delete_one_review(review_id: int = Path(description="The ID of the Review") ):
-    if review_id >= len(db["reviews"]):
-        raise HTTPException(status_code=404, detail="Review not found!")
+def delete_one_review(review_id: int = Path(description="The ID of the Review"), db: Session = Depends(get_db)):
+    review = review_db_query(db, review_id)
+    db.delete(review)
+    db.commit()
     
-    db["reviews"].remove(db["reviews"][review_id])
     return {"data": "deleted!"}
 
 # Update One Review
 @router.put("/{review_id}")
-def update_one_category(review: UpdateReview, review_id: int = Path(description="The ID of the Review")):
-    if review_id >= len(db["reviews"]):
-        raise HTTPException(status_code=404, detail="Review not found!")
+def update_one_category(review: UpdateReview, review_id: int = Path(description="The ID of the Review"), db: Session = Depends(get_db)):
+    old_review = review_db_query(db, review_id)
 
-    old_review = db["reviews"][review_id]
-    update_review = review.dict(exclude_unset=True)
-    new_review = old_review.copy(update=update_review)
+    update_data = review.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(old_review, key, value)
 
-    db["reviews"][review_id] = jsonable_encoder(new_review)
+    db.commit()
+    new_user = db.query(Review).filter(Review.id == review_id).first()
 
-    return {"data": new_review}
-"""
+    return {"data": new_user}
