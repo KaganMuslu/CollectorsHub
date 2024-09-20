@@ -1,50 +1,57 @@
-"""from fastapi import APIRouter, HTTPException, Path
-from fastapi.encoders import jsonable_encoder
-from models.model import Product, UpdateProduct
-from models.database import db
+from fastapi import APIRouter, Depends, HTTPException, Path
+from models.model import Product, PydanticProduct, UpdateProduct, get_db
+from sqlalchemy.orm import Session
 
 router = APIRouter()
+
+# If product exist returns product
+def product_db_query(db, product_id):
+    product = db.query(Product).filter(Product.id == product_id).first()
+    if (product == None):
+        raise HTTPException(status_code=404, detail="Product not found!")
+    else:
+        return product
 
 
 # Get All Products
 @router.get("")
-def all_products():
-    return {"data": db["products"] }
+def all_products(db: Session = Depends(get_db)):
+    return {"data": db.query(Product).all()}
 
 # Add One Product
 @router.post("", status_code=201)
-def post_product(product: Product):
-    db["products"].append(product)
+def post_product(product: PydanticProduct, db: Session = Depends(get_db)):
+    new_product = Product(**product.model_dump())
+    db.add(new_product)
+    db.commit()
     return {"data": "successfull!"}
 
 # Get One Product
 @router.get("/{product_id}")
-def get_one_product(product_id: int = Path(description="The ID of the product") ):
-    if product_id >= len(db["products"]):
-        raise HTTPException(status_code=404, detail="Product not found!")
+def get_one_product(product_id: int = Path(description="The ID of the product"), db: Session = Depends(get_db)):
+    product = product_db_query(db, product_id)
     
-    return {"data": db["products"][product_id] } 
+    return {"data": product} 
 
 # Delete One Product
 @router.delete("/{product_id}")
-def delete_one_product(product_id: int = Path(description="The ID of the product") ):
-    if product_id >= len(db["products"]):
-        raise HTTPException(status_code=404, detail="Product not found!")
+def delete_one_product(product_id: int = Path(description="The ID of the product"), db: Session = Depends(get_db)):
+    product = product_db_query(db, product_id)
+    db.delete(product)
+    db.commit()
     
-    db["products"].remove(db["products"][product_id])
     return {"data": "deleted!"}
 
 # Update One Product
 @router.put("/{product_id}")
-def update_one_product(product: UpdateProduct, product_id: int = Path(description="The ID of the product")):
-    if product_id >= len(db["products"]):
-        raise HTTPException(status_code=404, detail="Product not found!")
+def update_one_product(product: UpdateProduct, product_id: int = Path(description="The ID of the product"), db: Session = Depends(get_db)):
+    old_product = product_db_query(db, product_id)
 
-    old_product = db["products"][product_id]
-    update_product = product.dict(exclude_unset=True)
-    new_product = old_product.copy(update=update_product)
+    update_data = product.model_dump(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(old_product, key, value)
 
-    db["products"][product_id] = jsonable_encoder(new_product)
+    db.commit()
+    new_product = db.query(Product).filter(Product.id == product_id).first()
 
     return {"data": new_product}
-"""

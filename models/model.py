@@ -54,7 +54,7 @@ class Review(Base):
     id = Column(Integer, primary_key=True, index=True)
     rating = Column(Integer)
     comment = Column(String, nullable=True)
-    review_date = Column(DateTime, default=func.now)
+    review_date = Column(DateTime, default=func.now())
 
     product_id = Column(Integer, ForeignKey('product.id'))
     user_id = Column(Integer, ForeignKey('user.id'))
@@ -88,10 +88,10 @@ class PydanticCategory(BaseModel):
 
 # Products Table
 class PydanticProduct(BaseModel):
-    name: Optional[str] = None
+    name: str
     description: Optional[str] = None
-    category: Optional[EnumCategories] = None
-    quantity: Optional[int] = None
+    category_id: int
+    quantity: int
     price: Optional[float] = None
 
 class PydanticReview(BaseModel):
@@ -99,6 +99,7 @@ class PydanticReview(BaseModel):
     user_id: int
     rating: int
     comment: Optional[str] = None
+
 
 
 ### PYDANTIC UPDATE MODELS
