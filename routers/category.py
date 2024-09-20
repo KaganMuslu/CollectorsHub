@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
-from models.model import Category, PydanticCategory, UpdateCategory, get_db
+from models.pydantic import PydanticCategory, UpdateCategory
+from models.model import Category, get_db
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -15,7 +16,7 @@ def category_db_query(db, category_id):
 
 # Get All Categories
 @router.get("")
-def all_categories(db: Session = Depends(get_db)):
+def all_categories(limit: int = 10, skip: int = 0, db: Session = Depends(get_db)):
     return {"data": db.query(Category).all()}
 
 # Add One Category

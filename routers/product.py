@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
-from models.model import Product, PydanticProduct, UpdateProduct, get_db
+from models.pydantic import PydanticProduct, UpdateProduct
+from models.model import Product, get_db
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -15,8 +16,10 @@ def product_db_query(db, product_id):
 
 # Get All Products
 @router.get("")
-def all_products(db: Session = Depends(get_db)):
-    return {"data": db.query(Product).all()}
+def all_products(limit: int = 10, skip: int = 0, db: Session = Depends(get_db)):
+    products = db.query(Product).offset(skip).limit(limit).all()
+    return {"data": products}
+
 
 # Add One Product
 @router.post("", status_code=201)

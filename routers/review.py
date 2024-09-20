@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
-from models.model import PydanticReview, Review, UpdateReview, get_db
+from models.pydantic import PydanticReview, UpdateReview
+from models.model import Review, get_db
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -14,8 +15,9 @@ def review_db_query(db, review_id):
 
 # Get All Reviews
 @router.get("")
-def all_reviews(db: Session = Depends(get_db)):
-    return {"data": db.query(Review).all()}
+def all_reviews(limit: int = 10, skip: int = 0, db: Session = Depends(get_db)):
+    reviews = db.query(Review).offset(skip).limit(limit).all()
+    return {"data": reviews}
 
 # Add One Review
 @router.post("", status_code=201)

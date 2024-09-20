@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Path
-from models.model import PydanticUser, User, UpdateUser, get_db
+from models.pydantic import PydanticUser, UpdateUser
+from models.model import User, get_db
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -14,8 +15,9 @@ def user_db_query(db, user_id):
 
 # Get All Users
 @router.get("")
-def all_users(db: Session = Depends(get_db)):
-    return {"data": db.query(User).all()}
+def all_users(limit: int = 10, skip: int = 0, db: Session = Depends(get_db)):
+    users = db.query(User).offset(skip).limit(limit).all()
+    return {"data": users}
 
 # Add One User
 @router.post("", status_code=201)
